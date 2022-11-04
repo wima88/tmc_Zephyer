@@ -1,0 +1,11 @@
+# Copyright (c) 2019 Nordic Semiconductor ASA
+# SPDX-License-Identifier: Apache-2.0
+
+mainmenu "Application"
+
+rsource "src/version/Kconfig"
+
+config SPI
+	default y
+
+source "Kconfig.zephyr"
