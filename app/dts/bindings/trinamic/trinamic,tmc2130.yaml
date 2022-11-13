@@ -1,0 +1,25 @@
+# Cpyright (c) 2019, Nordic Semiconductor ASA
+# SPDX-License-Identifier: Apache-2.0
+
+description: |
+    Trinamic driver for the tmc2130
+    - spi-max-frequency
+    - pwms
+    - gpio
+
+
+compatible: "trinamic,tmc2130-spi"
+
+include: [spi-device.yaml]
+
+properties:
+    pwms:
+      required: true
+      type: phandle-array
+    
+    label:
+      required: false
+      type: string
+      description: |
+        Humman readable string describing the device
+

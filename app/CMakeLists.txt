@@ -63,12 +63,14 @@ list(APPEND CONF_FILE
   ${CMAKE_CURRENT_SOURCE_DIR}/conf/${BUILD_TYPE}.conf
   ${CMAKE_CURRENT_SOURCE_DIR}/boards/${BOARD}.conf
   )
-
+# Define DTS files
+list(APPEND DTS_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/dts/bindings)
 
 find_package(Zephyr REQUIRED HINTS $ENV{ZEPHYR_BASE})
 project(led_ws2812)
-
+target_include_directories(app PRIVATE inc)
 add_subdirectory(src/version)
 
+set(${app_sources} CRC.c Functions.c TMC2130.c inc/CRC.h inc/Functions.h inc/TMC2130.h)
 FILE(GLOB app_sources src/*.c)
 target_sources(app PRIVATE ${app_sources})
