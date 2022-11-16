@@ -6,7 +6,7 @@
 &spi1{
     tmc1: tmc2130@0{   
             compatible = "trinamic,tmc2130-spi";
-            pwms = <&pwm1 1 2000 PWM_POLARITY_NORMAL>;
+            pwms = <&pwm1 1 90000 PWM_POLARITY_NORMAL>;
             label = "mtr1" ;
             reg = <0>;
             spi-max-frequency = <40000>;

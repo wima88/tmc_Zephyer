@@ -38,18 +38,6 @@ void main(void) {
     
     LOG_INF("Version: %s", CONFIG_APP_VERSION);
 
-    if(!pwm1_dev)
-    {
-        LOG_ERR("cannot find pwm1 device");
-        return ;
-    }
-    else
-    {
-        LOG_INF("initializing the pwm");
-        const struct pwm_dt_spec pwm_spec = PWM_DT_SPEC_GET_BY_IDX(DT_NODELABEL(tmc1),0);
-        pwm_set_pulse_dt(&pwm_spec,200);
-        
-    }
     
     //hardware initialization
     tmc2130_init(&tmc2130,0,&tmc_config,registerResetState);
@@ -65,10 +53,30 @@ void main(void) {
     }
     LOG_INF("number of loaded registers %d",tick);
 
+    //LOG_INF("0x04 = %d",tmc2130_readInt(&tmc2130,0x04));
+    tmc2130_writeInt(&tmc2130,0xEC-0x80,0x100c3);
+    tmc2130_writeInt(&tmc2130,0x90-0x80,0x61f0a);
+    tmc2130_writeInt(&tmc2130,0x91-0x80,0xa);
+    tmc2130_writeInt(&tmc2130,0x80-0x80,0x4);
+    tmc2130_writeInt(&tmc2130,0x93-0x80,0x1f4);
+    tmc2130_writeInt(&tmc2130,0xf0-0x80,0x401c8);
+
+    if(!pwm1_dev)
+    {
+        LOG_ERR("cannot find pwm1 device");
+        return ;
+    }
+    else
+    {
+        LOG_INF("initializing the pwm");
+        const struct pwm_dt_spec pwm_spec = PWM_DT_SPEC_GET_BY_IDX(DT_NODELABEL(tmc1),0);
+        pwm_set_pulse_dt(&pwm_spec,50000);
+        
+    }
+
 
     
     while (1) {
-        k_sleep(DELAY_TIME);
 
 	}
 }
@@ -82,7 +90,7 @@ void tmc2130_readWriteArray(uint8_t channel, uint8_t *data, size_t length) {
         .delay = 2,
     };
 
-        spi_cfg.frequency = 5000000;
+        spi_cfg.frequency = 500000;
         spi_cfg.operation = SPI_OP_MODE_MASTER | SPI_TRANSFER_MSB | SPI_WORD_SET(8) | SPI_LINES_SINGLE | SPI_LOCK_ON;
         spi_cfg.cs = &ctrl;
 
@@ -104,7 +112,9 @@ void tmc2130_readWriteArray(uint8_t channel, uint8_t *data, size_t length) {
             .buffers =  bufs,
             .count = 1
     };
-    spi_transceive(spi1_dev, &spi_cfg, &tx, &rx);
+    if (spi_transceive(spi1_dev, &spi_cfg, &tx, &rx) !=0) {
+        LOG_INF("Error in SPI transaction");
+    }
     //spi_write(spi1_dev, &spi_cfg, &tx);
 
 }
