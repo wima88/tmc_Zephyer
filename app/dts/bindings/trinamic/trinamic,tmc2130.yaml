@@ -14,8 +14,28 @@ include: [spi-device.yaml]
 
 properties:
     pwms:
-      required: true
+      required: false
       type: phandle-array
+      description: |
+        PWM for step signal  
+    
+    step-gpios:
+      required: false
+      type: phandle-array
+      description: |
+        gpio used to generate step signal 
+    
+    dir-gpios:
+      required: false
+      type: phandle-array
+      description: |
+        gpio used to generate dir sgnal 
+    
+    en-gpios:
+      required: false
+      type: phandle-array
+      description: |
+        Humman readable string describing the device
     
     label:
       required: false
